@@ -1,6 +1,7 @@
 # tetrads
+<pre>
 find tetrads
-compute tetrads, figures made of four congruent shapes, so that each shares a boundary with all others.
+Compute tetrads, figures made of four congruent shapes, so that each shares a boundary with all others.
 see https://userpages.monmouth.com/~colonel/tetrads/ntetrads.html for details & solutions
 Ex : 
 shape =
@@ -24,4 +25,4 @@ tetrad =
  2 touches 1,3,4
  3 touches 1,2,4
  4 touches 1,2,3
- 
+ </pre>

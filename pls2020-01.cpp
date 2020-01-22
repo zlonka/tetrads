@@ -31,7 +31,7 @@ clock_t  t1, t2;
 #define uchar unsigned char
 #define uint unsigned int
 
-static const bool symV = false;
+bool symV = false;
 
 // static const int w = 21 + 2, h = 15 + 2, n = 4;
 int w = 23 + 2, h = 17 + 2, n = 4;
@@ -102,12 +102,12 @@ public:
 	}
 	void dispMotif(FILE *f = stdout, bool sample = false) {
 		if (sample) {
-			int hmax = this->h & 1 ? this->h / 2 + 1 : this->h / 2;
+			int hmax = this->h; //  this->h & 1 ? this->h / 2 + 1 : this->h / 2;
 			for (int j = 0; j < hmax; j++) {
 				for (int i = 0; i < this->w; i++) {
 					fprintf(f, "%d", (int)this->t[j*this->w + i]);
 				}
-				fprintf(f, " ");
+				// fprintf(f, " ");
 			}
 			// printf("\n");
 			return;
@@ -384,7 +384,10 @@ void parse(const uchar prof, int caseDepart = w + 1) {
 							strcpy(bitsDone[nbBitsDone++].bits, bits);
 							printf("Solution %d trouvee !\n", nbSolTot + nbSol + 1);
 							printf("motif %dx%d: \n", motif[0]->w, motif[0]->h); motif[0]->dispMotif();
-							printf("isConnected(%d,%d,%s)=%s\n", wMotif, hMotif, bits, isConnected(wMotif, hMotif, bits) ? "yes" : "no");
+							printf("isConnected(%d,%d,", wMotif, hMotif);
+							// printf(",%s", bits);
+							motif[0]->dispMotif(stdout, true);
+							printf(")=%s\n", isConnected(wMotif, hMotif, bits) ? "yes" : "no");
 							disp();
 							FILE *f;
 							char fout[80];
@@ -392,7 +395,10 @@ void parse(const uchar prof, int caseDepart = w + 1) {
 							int ok = fopen_s(&f, fout, "a");
 							fprintf(f, "Solution trouvee !\n");
 							fprintf(f, "motif %dx%d: \n", motif[0]->w, motif[0]->h); motif[0]->dispMotif(f);
-							fprintf(f, "isConnected(%d,%d,%s)=%s\n", wMotif, hMotif, bits, isConnected(wMotif, hMotif, bits) ? "yes" : "no");
+							fprintf(f, "isConnected(%d,%d,", wMotif, hMotif);
+							// fprintf(f, ",%s", bits);
+							motif[0]->dispMotif(f, true);
+							fprintf(f, ")=%s\n", isConnected(wMotif, hMotif, bits) ? "yes" : "no");
 							disp(f);
 							fclose(f);
 							parseFound = true;
@@ -544,6 +550,9 @@ int main(int argc, char* argv[])
 	if (argc > 2) {
 		sscanf_s(argv[2], "%d", &hFixed);
 	}
+	if (argc > 3 && !strcmp(argv[3], "symv")) {
+		symV = true;
+	}
 	nbSolTot = 0;
 	for (wMotif = wMin; wMotif <= wMax; wMotif++) {
 		int hMin = 3, hMax = wMotif;
@@ -551,7 +560,7 @@ int main(int argc, char* argv[])
 			hMin = hMax = hFixed;
 		}
 		// if (wMin == 6) { hMin = 6; hMax = 6; }
-		for (int hMotif = hMin; hMotif <= hMax; hMotif++) {
+		for (hMotif = hMin; hMotif <= hMax; hMotif++) {
 
 			// adapt grid size to shape size
 			w = wMotif * 3 + 2;
@@ -568,7 +577,7 @@ int main(int argc, char* argv[])
 			int nbBitsNeeded = wMotif * hHalf;		// ex : 8x4 => (8*4)/2 = 16 bits, 8x5 => 16 + 8 = 24 bits
 			if (nbBitsNeeded > 64) continue;
 
-			printf("\n***** motif %dx%d ****\n", wMotif, hMotif);
+			printf("\n***** motif %dx%d symv=%s (nbBitsNeeded=%d) ****\n", wMotif, hMotif, (symV?"yes":"no"), nbBitsNeeded);
 			//reset t
 			for (int i = 0; i < w*h; i++) t[i] = 0;
 			nbSol = 0;
@@ -622,7 +631,7 @@ int main(int argc, char* argv[])
 				// printf(" bin="); printBits(&iloop);
 
 				int2bin(iloop, nbBitsNeeded, bits);
-				for (int y = 0; y < hHalf; y++) motif[0]->setc(y, bits + wMotif * y /*+32 -3*wMotif-1*/);
+				// for (int y = 0; y < hHalf; y++) motif[0]->setc(y, bits + wMotif * y /*+32 -3*wMotif-1*/);
 
 				// printf("iloop=%llu motif=", iloop); motif[0]->dispMotif(stdout);
 				// exit(1);

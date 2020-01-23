@@ -1,10 +1,10 @@
-// pls2020-01.cppÂ : dÃ©finit le point d'entrÃ©e pour l'application console.
+// pls2020-01.cpp : définit le point d'entrée pour l'application console.
 //
 
 // #include "stdafx.h"
 
 
-// PLS01-2020.cppÂ : dÃ©finit le point d'entrÃ©e pour l'application console.
+// PLS01-2020.cpp : définit le point d'entrée pour l'application console.
 //
 
 #include <stdio.h>
@@ -131,7 +131,7 @@ public:
 		memcpy(this->t, other->t, this->w*this->h * sizeof(uchar));
 	}
 	void rotate90() {
-		uchar *tmp=(uchar*)malloc(::w*::h);
+		uchar *tmp = (uchar*)malloc(::w*::h);
 		memcpy(tmp, t, w*h);
 		for (int j = 0; j < this->h; j++) {
 			for (int i = 0; i < this->w; i++) {
@@ -542,7 +542,7 @@ int main(int argc, char* argv[])
 	// strcat(mbits, "1010010");
 	// strcat(mbits, "1000000");
 #endif
-	int wMin = 5, wMax = 32, hFixed=0;
+	int wMin = 5, wMax = 32, hFixed = 0;
 	if (argc > 1) {
 		sscanf_s(argv[1], "%d", &wMin);
 		wMax = wMin;
@@ -564,7 +564,7 @@ int main(int argc, char* argv[])
 
 			// adapt grid size to shape size
 			w = wMotif * 3 + 2;
-			h = hMotif * 3 + 2;
+			h = wMotif * 3 + 2;
 			t = (uchar*)realloc(t, w * h * sizeof(uchar));
 			buf = (uchar*)realloc(buf, w * h * sizeof(uchar));
 
@@ -577,7 +577,7 @@ int main(int argc, char* argv[])
 			int nbBitsNeeded = wMotif * hHalf;		// ex : 8x4 => (8*4)/2 = 16 bits, 8x5 => 16 + 8 = 24 bits
 			if (nbBitsNeeded > 64) continue;
 
-			printf("\n***** motif %dx%d symv=%s (nbBitsNeeded=%d) ****\n", wMotif, hMotif, (symV?"yes":"no"), nbBitsNeeded);
+			printf("\n***** motif %dx%d symv=%s (nbBitsNeeded=%d) ****\n", wMotif, hMotif, (symV ? "yes" : "no"), nbBitsNeeded);
 			//reset t
 			for (int i = 0; i < w*h; i++) t[i] = 0;
 			nbSol = 0;
